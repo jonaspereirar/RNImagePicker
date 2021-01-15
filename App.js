@@ -16,7 +16,7 @@ const App = () => {
 
   const pickSingleWithCamera = (cropping, mediaType = 'photo') => {
     ImagePicker.openCamera({
-      cropping: cropping,
+      cropping,
       width: 500,
       height: 500,
       includeExif: true,
@@ -24,15 +24,13 @@ const App = () => {
     })
       .then((image) => {
         console.log('received image', image);
-        this.setState({
-          image: {
-            uri: image.path,
-            width: image.width,
-            height: image.height,
-            mime: image.mime,
-          },
-          images: null,
+        setImage({
+          uri: image.path,
+          width: image.width,
+          height: image.height,
+          mime: image.mime,
         });
+        setImages(null);
       })
       .catch((e) => alert(e));
   };
@@ -67,6 +65,12 @@ const App = () => {
         onPress={() => pickSingleWithCamera(false)}
         style={styles.button}>
         <Text style={styles.text}>Select Single Image With Camera</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => pickSingleWithCamera(true)}
+        style={styles.button}>
+        <Text style={styles.text}>Select Single With Camera With Cropping</Text>
       </TouchableOpacity>
     </View>
   );
