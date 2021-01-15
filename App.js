@@ -35,6 +35,39 @@ const App = () => {
       .catch((e) => alert(e));
   };
 
+  const pickSingle = (cropit, circular = false, mediaType) => {
+    ImagePicker.openPicker({
+      width: 500,
+      height: 500,
+      cropping: cropit,
+      cropperCircleOverlay: circular,
+      sortOrder: 'none',
+      compressImageMaxWidth: 1000,
+      compressImageMaxHeight: 1000,
+      compressImageQuality: 1,
+      compressVideoPreset: 'MediumQuality',
+      includeExif: true,
+      cropperStatusBarColor: 'white',
+      cropperToolbarColor: 'white',
+      cropperActiveWidgetColor: 'white',
+      cropperToolbarWidgetColor: '#3498DB',
+    })
+      .then((image) => {
+        console.log('received image', image);
+        setImage({
+          uri: image.path,
+          width: image.width,
+          height: image.height,
+          mime: image.mime,
+        });
+        setImages(null);
+      })
+      .catch((e) => {
+        console.log(e);
+        Alert.alert(e.message ? e.message : e);
+      });
+  };
+
   const renderAsset = (image) => {
     // if (image.mime && image.mime.toLowerCase().indexOf('video/') !== -1) {
     //   return this.renderVideo(image);
@@ -71,6 +104,12 @@ const App = () => {
         onPress={() => pickSingleWithCamera(true)}
         style={styles.button}>
         <Text style={styles.text}>Select Single With Camera With Cropping</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => this.pickSingle(false)}
+        style={styles.button}>
+        <Text style={styles.text}>Select Single</Text>
       </TouchableOpacity>
     </View>
   );
